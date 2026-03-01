@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EVO 360 - Alessandro Ferreira</title>
+
+<style>
+body{
+    margin:0;
+    font-family:'Segoe UI', sans-serif;
+    background:#0a0f1c;
+    color:white;
+}
+
+/* Marca d'água */
+body::before{
+    content:"";
+    background:url('logo.png') no-repeat center center;
+    background-size:420px;
+    opacity:0.05;
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    z-index:-1;
+}
+
+header{
+    text-align:center;
+    padding:40px 20px;
+    background:linear-gradient(135deg,#000814,#001d3d,#003566);
+}
+
+header h1{
+    color:#00b4ff;
+    font-size:28px;
+    letter-spacing:2px;
+}
+
+header p{
+    color:#cbd5e1;
+    margin-top:8px;
+}
+
+.box{
+    background:#111827;
+    padding:25px;
+    border-radius:20px;
+    max-width:480px;
+    margin:20px auto;
+    box-shadow:0 15px 40px rgba(0,180,255,0.25);
+}
+
+h2{
+    color:#00e5ff;
+    font-size:18px;
+    margin-bottom:10px;
+}
+
+input, select{
+    width:100%;
+    padding:14px;
+    margin:10px 0;
+    border-radius:10px;
+    border:1px solid #1e293b;
+    background:#0f172a;
+    color:white;
+    font-size:15px;
+}
+
+button{
+    width:100%;
+    padding:14px;
+    border:none;
+    border-radius:10px;
+    background:#0077ff;
+    color:white;
+    font-weight:bold;
+    cursor:pointer;
+    margin-top:15px;
+    font-size:16px;
+    transition:0.3s;
+}
+
+button:hover{
+    transform:scale(1.03);
+}
+
+.resultado{
+    margin-top:25px;
+    padding:20px;
+    border-radius:15px;
+    background:#001d3d;
+    display:none;
+    animation:fadeIn 0.8s ease forwards;
+}
+
+@keyframes fadeIn{
+    from{opacity:0; transform:translateY(20px);}
+    to{opacity:1; transform:translateY(0);}
+}
+
+/* Barra IMC */
+.barra-container{
+    background:#0f172a;
+    border-radius:10px;
+    overflow:hidden;
+    margin:15px 0;
+}
+
+.barra-imc{
+    height:20px;
+    width:0%;
+    background:linear-gradient(90deg,#00e5ff,#0077ff);
+    transition:width 1.2s ease;
+}
+
+.faixa{
+    display:flex;
+    justify-content:space-between;
+    font-size:12px;
+    margin-top:5px;
+    color:#94a3b8;
+}
+
+.cta{
+    margin-top:25px;
+    background:#0d47a1;
+    padding:20px;
+    border-radius:15px;
+}
+
+.cta h3{
+    color:#00e5ff;
+    font-size:18px;
+}
+
+.whatsapp{
+    margin-top:15px;
+    background:#25D366;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+<h1>EVO 360</h1>
+<p>Diagnóstico Estratégico de Evolução Corporal</p>
+</header>
+
+<div class="box">
+
+<h2>Seus Dados</h2>
+
+<input type="number" id="peso" placeholder="Peso (kg)" min="1" step="0.1">
+<input type="number" id="altura" placeholder="Altura (cm)" min="1">
+<input type="number" id="idade" placeholder="Idade" min="1">
+
+<select id="objetivo">
+<option value="">Objetivo principal</option>
+<option>Redução de gordura</option>
+<option>Hipertrofia muscular</option>
+<option>Recomposição corporal</option>
+<option>Performance esportiva</option>
+</select>
+
+<select id="frequencia">
+<option value="">Frequência de treino atual</option>
+<option>Não treino</option>
+<option>1-2x por semana</option>
+<option>3-4x por semana</option>
+<option>5x ou mais</option>
+</select>
+
+<button onclick="calcular()">GERAR RELATÓRIO EVO 360</button>
+
+<div id="resultado" class="resultado">
+
+<h2>Seu Resultado</h2>
+
+<div id="textoRelatorio"></div>
+
+<div class="barra-container">
+    <div id="barraIMC" class="barra-imc"></div>
+</div>
+
+<div class="faixa">
+<span>18.5</span>
+<span>24.9</span>
+<span>29.9+</span>
+</div>
+
+<div class="cta">
+<h3>Aplicação do Método EVO 360</h3>
+
+<p>
+O seu perfil se encaixa no <strong>Método EVO 360</strong>.  
+Esse método pode ser aplicado de duas formas:
+</p>
+
+<p>🔵 <strong>Presencial Estratégico</strong> – para correções técnicas e acompanhamento detalhado.</p>
+<p>⚫ <strong>Online Personalizado</strong> – para evolução com flexibilidade de horário.</p>
+
+<p>
+A diferença não está na qualidade, mas na logística. O método, a estrutura e o direcionamento são os mesmos.
+</p>
+
+<button class="whatsapp" onclick="enviarWhatsApp()">
+🚀 Quero aplicar o Método EVO 360
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+<script>
+let mensagemFinal="";
+
+function calcular(){
+
+let peso=parseFloat(document.getElementById("peso").value);
+let altura=parseFloat(document.getElementById("altura").value)/100;
+let idade=document.getElementById("idade").value;
+let objetivo=document.getElementById("objetivo").value;
+let frequencia=document.getElementById("frequencia").value;
+
+if(!peso || !altura || !idade || !objetivo || !frequencia){
+    alert("Preencha todas as informações.");
+    return;
+}
+
+let imc=peso/(altura*altura);
+let perfil="";
+let porcentagem=Math.min((imc/40)*100,100);
+
+if(imc<18.5) perfil="Abaixo do peso – Necessita estruturação estratégica.";
+else if(imc<24.9) perfil="Peso adequado – Potencial de otimização.";
+else if(imc<29.9) perfil="Sobrepeso – Ajustes estratégicos necessários.";
+else perfil="Obesidade – Alta necessidade de estratégia estruturada.";
+
+document.getElementById("resultado").style.display="block";
+
+document.getElementById("textoRelatorio").innerHTML=
+"<strong>IMC:</strong> "+imc.toFixed(2)+"<br><br>"+
+"<strong>Classificação:</strong><br>"+perfil+"<br><br>"+
+"Com base no seu objetivo de <strong>"+objetivo+"</strong> e sua frequência atual ("+frequencia+"), existe margem clara para evolução consistente com o plano estruturado.";
+
+setTimeout(()=>{
+document.getElementById("barraIMC").style.width=porcentagem+"%";
+},300);
+
+mensagemFinal=
+"Olá Alessandro, finalizei meu Diagnóstico EVO 360.\n"+
+"IMC: "+imc.toFixed(2)+"\n"+
+"Objetivo: "+objetivo+"\n"+
+"Gostaria de entender como aplicar o Método EVO 360 no formato ideal para mim.";
+}
+
+function enviarWhatsApp(){
+let numero="5521979259432";
+let url="https://wa.me/"+numero+"?text="+encodeURIComponent(mensagemFinal);
+window.open(url,"_blank");
+}
+</script>
+
+</body>
+</html>
